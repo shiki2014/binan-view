@@ -16,3 +16,7 @@ export function getData () {
 export function getPositions () {
   return apiClient.get('/positions')
 }
+
+export function getLog () {
+  return apiClient.get('/log')
+}
