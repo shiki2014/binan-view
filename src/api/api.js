@@ -17,6 +17,10 @@ export function getPositions () {
   return apiClient.get('/positions')
 }
 
-export function getLog () {
-  return apiClient.get('/log')
+export function getErrorLog () {
+  return apiClient.get('/errorLog')
+}
+
+export function getAppLog () {
+  return apiClient.get('/appLog')
 }

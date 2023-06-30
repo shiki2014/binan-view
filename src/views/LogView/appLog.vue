@@ -1,13 +1,11 @@
 <template>
   <div>
-    <div class="logBox">
-      <div v-for="item in data" :key="item">{{item}}</div>
-    </div>
+    <div class="logBox">{{ data }}</div>
   </div>
 </template>
 
 <script>
-import { getLog } from '@/api/api.js'
+import { getAppLog } from '@/api/api.js'
 
 export default {
   data () {
@@ -16,9 +14,8 @@ export default {
     }
   },
   created () {
-    getLog().then(res => {
-      let logs = res.data.split('\n')
-      this.data = logs
+    getAppLog().then(res => {
+      this.data = res.data
     })
   },
   methods: {
@@ -33,5 +30,6 @@ export default {
 .logBox{
   text-align: left;
   padding:20px;
+  white-space: pre-wrap;
 }
 </style>

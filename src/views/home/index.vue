@@ -1,41 +1,48 @@
 <template>
   <div>
-    <div>这里显示数据{{ data }}</div>
-    <div>所有仓位数据</div>
-    <el-button type="primary" @click="goLogView">查看日志</el-button>
-    <el-button type="primary">主要按钮</el-button>
-    <el-button type="success">成功按钮</el-button>
-    <el-button type="info">信息按钮</el-button>
-    <el-button type="warning">警告按钮</el-button>
-    <el-button type="danger">危险按钮</el-button>
-    <div></div>
+    <el-row>
+      <el-col :span="16">
+        <el-statistic group-separator="," :precision="2" :value="data.length" title="当前仓位数量"></el-statistic>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item v-for="item in data" :key="item.symbol" :title="item.symbol" :name="item.symbol">
+            <div>方向: {{ item.positionSide === 'SHORT' ? '空头' : '多头'}}</div>
+            <div>均价: {{ item.entryPrice }}</div>
+            <div>杠杆: {{ item.leverage }}</div>
+            <div>未实现利润: {{ item.unrealizedProfit }}</div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
+      <el-col :span="8">
+        <div><el-button style="width:100%;" type="primary" @click="goLogErrorView">查看错误日志</el-button></div>
+        <div><el-button style="width:100%;" type="primary" @click="goLogAppView">查看App日志</el-button></div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import { getUsers, getData } from '@/api/api.js'
+import { getPositions } from '@/api/api.js'
 
 export default {
   data () {
     return {
-      data: 1
+      data: [],
+      activeNames: []
     }
   },
   created () {
-    getData().then(res => {
+    getPositions().then(res => {
       this.data = res.data
     })
   },
   methods: {
-    getData () {
-      getUsers().then(res => {
-        console.log(res)
-        this.data = res.data
-      }).catch()
+    goLogErrorView () {
+      // 查看错误日志
+      this.$router.push('/errorLog')
     },
-    goLogView () {
-      // 查看日志
-      this.$router.push('/log')
+    goLogAppView () {
+      // 查看错误日志
+      this.$router.push('/appLog')
     }
   }
 }
