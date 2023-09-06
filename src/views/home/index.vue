@@ -32,7 +32,17 @@ export default {
   },
   created () {
     getPositions().then(res => {
-      this.data = res.data
+      this.data = res.data.sort((a,b) => {
+        let nameA = a.symbol.toLowerCase(); // 将属性值转换为小写以进行不区分大小写的比较
+        let nameB = b.symbol.toLowerCase();
+        if (nameA < nameB) {
+            return -1;
+        } else if (nameA > nameB) {
+            return 1;
+        } else {
+            return 0;
+        }
+      })
     })
   },
   methods: {
