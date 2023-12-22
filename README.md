@@ -28,7 +28,7 @@ git clone https://github.com/shiki2014/binan-view
 2. 进入项目目录：
 
 ```
-cd quant-trading-frontend
+cd binan-view
 ```
 
 3. 安装依赖：
