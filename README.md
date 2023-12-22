@@ -87,8 +87,3 @@ yarn dev
 
 该项目采用 MIT 许可证。详细信息请参阅 [LICENSE](./LICENSE) 文件。
 
-## 联系方式
-
-如有任何疑问，请联系：
-- 作者：Your Name
-- 邮箱：your.email@example.com
