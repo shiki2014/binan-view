@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+     .shuttle{
+            width: 800px;
+            display:flex;
+        }
+        .shuttle .box{
+            border:solid 1px #333;
+        }
+        .shuttle ul li.active{
+            background-color:#fff3a1;
+        }
+  </style>
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="ddlUserType" class="transfer">
+  </div>
+</body>
+<script type="text/javascript">
+  class Shuttle {
+      constructor (){
+          this.id = ''
+          this.leftData = []
+          this.rightData = []
+          this.callback = function () {}
+          this.name = 'title'
+          this.data = []
+      }
+      getLeftActive() {
+          return this.leftData.filter(item => item.active)
+      }
+      getRightActive() {
+          return this.rightData.filter(item => item.active)
+      }
+      goRight(){
+          this.rightData = this.rightData.concat(this.getLeftActive())
+          this.leftData = this.leftData.filter(item => !item.active)
+          console.log(...this.rightData,...this.leftData,this.rightData,this.leftData)
+          this.updateData()
+      }
+      goLeft(){
+          this.leftData = this.leftData.concat(this.getRightActive())
+          this.rightData = this.rightData.filter(item => !item.active)
+          this.updateData()
+      }
+      liClick(dom){
+          if ($(dom).hasClass('active')){
+              $(dom).removeClass('active')
+          } else {
+              $(dom).addClass('active')
+          }
+          let domId = $(dom).attr('data-shuttle-id')
+          let activeSet = item =>{
+              if(item.id == domId){
+                  item.active = !item.active
+              }
+              return item
+          }
+          this.leftData = this.leftData.map(activeSet)
+          this.rightData = this.rightData.map(activeSet)
+      }
+      updateData () {
+          let name = this.name
+          this.leftData = this.leftData.map(item =>{
+              item.active = false
+              return item
+          })
+          this.rightData = this.rightData.map(item =>{
+              item.active = false
+              return item
+          })
+          let leftHtml = this.leftData.map(item=>{
+              return `<li class="" data-shuttle-id="${item.id}">${item[name]}</li>`
+          }).join('')
+          let rightHtml = this.rightData.map(item=>{
+              return `<li class="" data-shuttle-id="${item.id}">${item[name]}</li>`
+          }).join('')
+          $(`${this.id} .left ul`).html(leftHtml)
+          $(`${this.id} .right ul`).html(rightHtml)
+          this.mount()
+      }
+      initData (data, id) {
+          this.rightData = data.map((item,index) =>{
+              item.active = false
+              item.id = `shuttle${index}`
+              console.log(index)
+              return item
+          })
+          this.id = '#' + id
+          this.setHtml()
+          this.setData()
+          this.mount()
+      }
+      setData () {
+          let data = this.rightData
+          let name = this.name
+          let htmlArr = data.map(item=>{
+              return `<li class="" data-shuttle-id="${item.id}">${item[name]}</li>`
+          })
+          let _this = this
+          $(`${this.id} .right.box ul`).append(htmlArr.join(''))
+          $(`${this.id} .goRight`).click(function (){
+              _this.goRight(this)
+          })
+          $(`${this.id} .goLeft`).click(function (){
+              _this.goLeft(this)
+          })
+      }
+      setHtml () {
+          let html = `
+              <div class="shuttle">
+                  <div class="left box">
+                      <ul class="list"></ul>
+                  </div>
+                  <div class="content">
+                      <button class="goLeft">向左</button>
+                      <button class="goRight">向右</button>
+                  </div>
+                  <div class="right box">
+                      <ul class="list"></ul>
+                  </div>
+              </div>
+          `
+          $(this.id).html(html)
+      }
+      updateHtml () {
+          // 在这里更新html
+          $(`${this.id} .left ul`).html()
+      }
+      mount () {
+          // 在这里挂载html方法
+          let _this = this
+          $(`${this.id} .box li`).click(function () {
+              _this.liClick(this)
+          })
+
+      }
+      confirm () {
+          // 确认方法
+          let data = this.leftData
+          console.log(data)
+          this.callback && this.callback(data)
+      }
+  }
+  let shuttle = new Shuttle()
+  let data = [{
+      title:'测试1',
+  },{
+      title:'测试2',
+  }]
+  shuttle.initData(data,'ddlUserType')
+</script>
+</html>

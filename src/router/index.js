@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/home'
 import errorLog from '@/views/LogView/errorLog'
 import appLog from '@/views/LogView/appLog'
+import control from '@/views/control'
 Vue.use(Router)
 
 export default new Router({
@@ -10,8 +10,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'control',
+      component: control
     },
     {
       path: '/errorLog',
@@ -22,6 +22,10 @@ export default new Router({
       path: '/appLog',
       name: 'appLog',
       component: appLog
+    },
+    {
+      path: '/control',
+      redirect: '/'
     }
   ]
 })
